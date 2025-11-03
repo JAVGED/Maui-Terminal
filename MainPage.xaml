@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Terminal.MainPage"
+             BackgroundColor="Black">
+
+    <ScrollView>
+        <VerticalStackLayout
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            Spacing="15"
+            Padding="20">
+
+            <Label Text="=== MENU ==="
+                   TextColor="White"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="20">
+                <Label Text="Dodaj produkty"
+                       TextColor="White"
+                       VerticalOptions="Center" />
+                <Button x:Name="BtnDodaj"
+                        Clicked="BtnDodaj_Clicked"
+                        Text="+"
+                        BackgroundColor="Transparent"
+                        TextColor="White"
+                        BorderWidth="1"
+                        CornerRadius="1"
+                        BorderColor="Blue" />
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="20">
+                <Label Text="Pokaż produkty"
+                       TextColor="White"
+                       VerticalOptions="Center" />
+                <Button x:Name="BtnPokaz"
+                        Clicked="BtnPokaz_Clicked"
+                        Text="?"
+                        BackgroundColor="Transparent"
+                        TextColor="White"
+                        BorderWidth="1"
+                        CornerRadius="1"
+                        BorderColor="Blue" />
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="20">
+                <Label Text="Edytuj produkty"
+                       TextColor="White"
+                       VerticalOptions="Center" />
+                <Button x:Name="BtnEdytuj"
+                        Clicked="BtnEdytuj_Clicked"
+                        Text="*"
+                        BackgroundColor="Transparent"
+                        TextColor="White"
+                        BorderWidth="1"
+                        CornerRadius="1"
+                        BorderColor="Blue"/>
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="20">
+                <Label Text="Usuwaj produkty"
+                       TextColor="White"
+                       VerticalOptions="Center" />
+                <Button x:Name="BtnUsun"
+                        Clicked="BtnUsun_Clicked"
+                        Text="-"
+                        BackgroundColor="Transparent"
+                        TextColor="White"
+                        BorderWidth="1"
+                        CornerRadius="1"
+                        BorderColor="Blue" />
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="20">
+                <Label Text="Zapisz do pliku CSV"
+           TextColor="White"
+           VerticalOptions="Center" />
+                <Button x:Name="BtnPlik"
+            Clicked="BtnPlik_Clicked"
+            Text="/ "
+            BackgroundColor="Transparent"
+            TextColor="White"
+            BorderWidth="1"
+            CornerRadius="1"
+            BorderColor="Blue" />
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="20">
+                <Label Text="Exit"
+           TextColor="White"
+           VerticalOptions="Center" />
+                <Button x:Name="BtnExit"
+            Clicked="BtnExit_Clicked"
+            Text="X"
+            BackgroundColor="Transparent"
+            TextColor="White"
+            BorderWidth="1"
+            CornerRadius="1"
+            BorderColor="Blue" />
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
