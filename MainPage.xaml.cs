@@ -1,3 +1,11 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.ApplicationModel;
+
+
 namespace Terminal
 {
     public partial class MainPage : ContentPage
@@ -173,10 +181,29 @@ namespace Terminal
             string lista = string.Join("\n", produkty.Select(p => $"{p.Nazwa} - {p.Cena} zł ({p.Kategoria})"));
             await DisplayAlert("Lista produktów", lista, "OK");
         }
-  
 
 
-        private void BtnPlik_Clicked(object sender, EventArgs e)
+
+        private async void BtnPlik_Clicked(object sender, EventArgs e)//CSV
+        {
+            if (produkty.Count == 0)
+            {
+                await DisplayAlert("CSV", "Brak produktów do zapisania.", "OK");
+                return;
+            }
+
+            var lines = new List<string> { "Nazwa,Cena,Kategoria" };
+            lines.AddRange(produkty.Select(p => $"{p.Nazwa},{p.Cena},{p.Kategoria}"));
+
+            // Zapis w katalogu dokumentów użytkownika
+            string folder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            string fileName = Path.Combine(folder, "produkty.csv");
+            File.WriteAllLines(fileName, lines);
+
+            await DisplayAlert("CSV", $"Zapisano produkty do:\n{fileName}", "OK");
+        }
+
+        private void BtnLite_Clicked(object sender, EventArgs e)//sqlite -zapisz do bazy
         {
 
         }
@@ -185,7 +212,7 @@ namespace Terminal
         {
 #if ANDROID 
             // Zamknij aplikację na Androidzie
-            Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
+            Android.OS.Process.KillProcess(Android.OS.Process.MyPid()); 
 #elif IOS
             // iOS nie pozwala na wymuszone zamknięcie, ale jeśli używasz .NET 8+, to:
             Application.Current?.Quit();
