@@ -86,6 +86,21 @@
             BorderColor="Blue" />
             </HorizontalStackLayout>
 
+
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="20">
+                <Label Text="Zapisz do bazy (sqlite)"
+                  TextColor="White"
+                  VerticalOptions="Center" />
+                <Button x:Name="BtnLite"
+                   Clicked="BtnLite_Clicked"
+                   Text="/ "
+                   BackgroundColor="Transparent"
+                   TextColor="White"
+                   BorderWidth="1"
+                   CornerRadius="1"
+                   BorderColor="Blue" />
+            </HorizontalStackLayout>
+
             <HorizontalStackLayout HorizontalOptions="Center" Spacing="20">
                 <Label Text="Exit"
            TextColor="White"
