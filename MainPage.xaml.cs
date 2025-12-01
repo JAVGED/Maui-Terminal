@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.Maui.Controls;
-using Microsoft.Maui.ApplicationModel;
-
 
 namespace Terminal
 {
     public partial class MainPage : ContentPage
     {
         private List<Produkt> produkty = new List<Produkt>();
-
 
         public MainPage()
         {
@@ -53,14 +50,11 @@ namespace Terminal
                 return;
             }
 
-            // Dodanie do listy
             var produkt = new Produkt { Nazwa = nazwa, Cena = cena, Kategoria = kategoria };
             produkty.Add(produkt);
 
             await DisplayAlert("Sukces", $"Dodano: {produkt}", "OK");
         }
-
-
 
 
         private async void BtnUsun_Clicked(object sender, EventArgs e)
@@ -78,18 +72,8 @@ namespace Terminal
                 return;
             }
 
-            Produkt produkt = null;
-
-            foreach (var p in produkty)
-            {
-                if (p.Nazwa.Equals(nazwa, StringComparison.OrdinalIgnoreCase))
-                {
-                    produkt = p;
-                    break;
-                    // kończymy szukanie po znalezieniu pierwszego pasującego
-                }
-            }
-
+            Produkt produkt = produkty.FirstOrDefault(p =>
+                p.Nazwa.Equals(nazwa, StringComparison.OrdinalIgnoreCase));
 
             if (produkt == null)
             {
@@ -110,7 +94,6 @@ namespace Terminal
                 return;
             }
 
-            // 1. Pokaz produkt
             string[] nazwyProduktow = produkty.Select(p => p.Nazwa).ToArray();
             string wybranyProduktNazwa = await DisplayActionSheet(
                 "Wybierz produkt do edycji:",
@@ -122,53 +105,43 @@ namespace Terminal
             if (string.IsNullOrWhiteSpace(wybranyProduktNazwa) || wybranyProduktNazwa == "Anuluj")
                 return;
 
-            // 2. Co edytować
-            Produkt produkt = null;
-
-            foreach (var p in produkty)
-            {
-                if (p.Nazwa.Equals(wybranyProduktNazwa, StringComparison.OrdinalIgnoreCase))
-                {
-                    produkt = p;
-                    break; // gdy znaleziono koniec
-                }
-            }
+            Produkt produkt = produkty.FirstOrDefault(p =>
+                p.Nazwa.Equals(wybranyProduktNazwa, StringComparison.OrdinalIgnoreCase));
 
             if (produkt == null)
             {
-                await DisplayAlert("Błąd", "Nie znaleziono wybranego produktu.", "OK");
+                await DisplayAlert("Błąd", "Nie znaleziono produktu.", "OK");
                 return;
             }
 
-            // 3. Pyta o nowe dane
-            string nowaNazwa = await DisplayPromptAsync("Edycja produktu", "Podaj nową nazwę produktu:", initialValue: produkt.Nazwa);
-            if (string.IsNullOrWhiteSpace(nowaNazwa)) //initial bierze wczesniejsza wartosc i daje w pole
+            string nowaNazwa = await DisplayPromptAsync("Edycja produktu", "Nowa nazwa:", initialValue: produkt.Nazwa);
+            if (string.IsNullOrWhiteSpace(nowaNazwa))
             {
                 await DisplayAlert("Błąd", "Nazwa nie może być pusta.", "OK");
                 return;
             }
 
-            string nowaCenaInput = await DisplayPromptAsync("Edycja produktu", "Podaj nową cenę produktu (zł):", initialValue: produkt.Cena.ToString());
-            if (!decimal.TryParse(nowaCenaInput, out decimal nowaCena) || nowaCena < 0) 
+            string nowaCenaInput = await DisplayPromptAsync("Edycja produktu", "Nowa cena (zł):", initialValue: produkt.Cena.ToString());
+            if (!decimal.TryParse(nowaCenaInput, out decimal nowaCena) || nowaCena < 0)
             {
-                await DisplayAlert("Błąd", "Podano niepoprawną cenę.", "OK");
+                await DisplayAlert("Błąd", "Podano błędną cenę.", "OK");
                 return;
             }
 
-            string nowaKategoria = await DisplayPromptAsync("Edycja produktu", "Podaj nową kategorię produktu:", initialValue: produkt.Kategoria);
+            string nowaKategoria = await DisplayPromptAsync("Edycja produktu", "Nowa kategoria:", initialValue: produkt.Kategoria);
             if (string.IsNullOrWhiteSpace(nowaKategoria))
             {
                 await DisplayAlert("Błąd", "Kategoria nie może być pusta.", "OK");
                 return;
             }
 
-            // 4. Zaktualizuj dane
             produkt.Nazwa = nowaNazwa;
             produkt.Cena = nowaCena;
             produkt.Kategoria = nowaKategoria;
 
-            await DisplayAlert("Sukces", $"Zmieniono dane produktu:\n{produkt}", "OK");
+            await DisplayAlert("Sukces", $"Zmieniono produkt:\n{produkt}", "OK");
         }
+
 
         private async void BtnPokaz_Clicked(object sender, EventArgs e)
         {
@@ -183,8 +156,7 @@ namespace Terminal
         }
 
 
-
-        private async void BtnPlik_Clicked(object sender, EventArgs e)//CSV
+        private async void BtnPlik_Clicked(object sender, EventArgs e)
         {
             if (produkty.Count == 0)
             {
@@ -195,29 +167,72 @@ namespace Terminal
             var lines = new List<string> { "Nazwa,Cena,Kategoria" };
             lines.AddRange(produkty.Select(p => $"{p.Nazwa},{p.Cena},{p.Kategoria}"));
 
-            // Zapis w katalogu dokumentów użytkownika
             string folder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             string fileName = Path.Combine(folder, "produkty.csv");
+
             File.WriteAllLines(fileName, lines);
 
-            await DisplayAlert("CSV", $"Zapisano produkty do:\n{fileName}", "OK");
+            await DisplayAlert("CSV", $"Zapisano: {fileName}", "OK");
         }
 
-        private void BtnLite_Clicked(object sender, EventArgs e)//sqlite -zapisz do bazy
-        {
 
+        // =====================================
+        //      WCZYTYWANIE CSV (NOWE)
+        // =====================================
+
+        private async void BtnOdczytCsv_Clicked(object sender, EventArgs e)
+        {
+            string folder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            string fileName = Path.Combine(folder, "produkty.csv");
+
+            if (!File.Exists(fileName))
+            {
+                await DisplayAlert("CSV", "Plik produkty.csv nie istnieje.", "OK");
+                return;
+            }
+
+            try
+            {
+                var lines = File.ReadAllLines(fileName);
+
+                produkty.Clear();
+
+                foreach (var line in lines.Skip(1)) // pomija nagłówek
+                {
+                    var parts = line.Split(',');
+
+                    if (parts.Length == 3 && decimal.TryParse(parts[1], out decimal cena))
+                    {
+                        produkty.Add(new Produkt
+                        {
+                            Nazwa = parts[0],
+                            Cena = cena,
+                            Kategoria = parts[2]
+                        });
+                    }
+                }
+
+                await DisplayAlert("CSV", "Wczytano produkty z pliku.", "OK");
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Błąd", ex.Message, "OK");
+            }
+        }
+
+
+
+        private void BtnLite_Clicked(object sender, EventArgs e)
+        {
         }
 
         private void BtnExit_Clicked(object sender, EventArgs e)
         {
-#if ANDROID 
-            // Zamknij aplikację na Androidzie
-            Android.OS.Process.KillProcess(Android.OS.Process.MyPid()); 
+#if ANDROID
+            Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
 #elif IOS
-            // iOS nie pozwala na wymuszone zamknięcie, ale jeśli używasz .NET 8+, to:
             Application.Current?.Quit();
 #elif WINDOWS
-            // Windows / MacCatalyst
             Application.Current?.Quit();
 #else
             Application.Current?.Quit();
