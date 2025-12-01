@@ -74,45 +74,59 @@
 
             <HorizontalStackLayout HorizontalOptions="Center" Spacing="20">
                 <Label Text="Zapisz do pliku CSV"
-           TextColor="White"
-           VerticalOptions="Center" />
+                       TextColor="White"
+                       VerticalOptions="Center" />
                 <Button x:Name="BtnPlik"
-            Clicked="BtnPlik_Clicked"
-            Text="/ "
-            BackgroundColor="Transparent"
-            TextColor="White"
-            BorderWidth="1"
-            CornerRadius="1"
-            BorderColor="Blue" />
+                        Clicked="BtnPlik_Clicked"
+                        Text="/"
+                        BackgroundColor="Transparent"
+                        TextColor="White"
+                        BorderWidth="1"
+                        CornerRadius="1"
+                        BorderColor="Blue" />
             </HorizontalStackLayout>
 
+            <!-- NOWY PRZYCISK: WCZYTAJ CSV -->
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="20">
+                <Label Text="Wczytaj z pliku CSV"
+                       TextColor="White"
+                       VerticalOptions="Center" />
+                <Button x:Name="BtnOdczytCsv"
+                        Clicked="BtnOdczytCsv_Clicked"
+                        Text="⇩"
+                        BackgroundColor="Transparent"
+                        TextColor="White"
+                        BorderWidth="1"
+                        CornerRadius="1"
+                        BorderColor="Blue" />
+            </HorizontalStackLayout>
 
             <HorizontalStackLayout HorizontalOptions="Center" Spacing="20">
                 <Label Text="Zapisz do bazy (sqlite)"
-                  TextColor="White"
-                  VerticalOptions="Center" />
+                       TextColor="White"
+                       VerticalOptions="Center" />
                 <Button x:Name="BtnLite"
-                   Clicked="BtnLite_Clicked"
-                   Text="/ "
-                   BackgroundColor="Transparent"
-                   TextColor="White"
-                   BorderWidth="1"
-                   CornerRadius="1"
-                   BorderColor="Blue" />
+                        Clicked="BtnLite_Clicked"
+                        Text="/ "
+                        BackgroundColor="Transparent"
+                        TextColor="White"
+                        BorderWidth="1"
+                        CornerRadius="1"
+                        BorderColor="Blue" />
             </HorizontalStackLayout>
 
             <HorizontalStackLayout HorizontalOptions="Center" Spacing="20">
                 <Label Text="Exit"
-           TextColor="White"
-           VerticalOptions="Center" />
+                       TextColor="White"
+                       VerticalOptions="Center" />
                 <Button x:Name="BtnExit"
-            Clicked="BtnExit_Clicked"
-            Text="X"
-            BackgroundColor="Transparent"
-            TextColor="White"
-            BorderWidth="1"
-            CornerRadius="1"
-            BorderColor="Blue" />
+                        Clicked="BtnExit_Clicked"
+                        Text="X"
+                        BackgroundColor="Transparent"
+                        TextColor="White"
+                        BorderWidth="1"
+                        CornerRadius="1"
+                        BorderColor="Blue" />
             </HorizontalStackLayout>
 
         </VerticalStackLayout>
